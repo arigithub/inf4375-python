@@ -1,0 +1,334 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta charset="UTF-8">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{% static "index.css" %}"">
+    <link rel="stylesheet" href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}"">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	
+		<script type="text/javascript">
+		function searchScript() {
+
+			var xmlHttp = new XMLHttpRequest();
+			var url = "http://127.0.0.1:8000/RechercheAjax/" + document.getElementsByName("valeurRech")[0].value;
+			var valMin = document.getElementById("montantMin").value;
+			var valMax = document.getElementById("montantMax").value;
+			var valMinNum = -99999999;
+			if (valMin != "Minimum"){
+				valMinNum = parseInt(valMin);
+			}
+			var valMaxNum = 99999999;
+			if (valMax != "Maximum"){
+				valMaxNum = parseInt(valMax);
+			}
+			xmlHttp.open( "GET", url, false );
+			xmlHttp.send( null );
+			var json = JSON.parse(xmlHttp.responseText);
+			
+			var champs = ["FOURNISSEUR","APPROBATEUR","DESCRIPTION","SERVICE","ACTIVITÉ","MONTANT","PORTION À LA CHARGE DE L'AGGLO.","RÉPARTITION","DIRECTION","NO DE DOSSIER","OBJET","NO DÉCISION","DATE SIGNATURE"];
+			var table = document.getElementById("tableRes");
+			table.innerHTML = "";
+			var rangee = table.insertRow(0);
+			for (var i = 0 ; i < champs.length; i++){
+				var cellule = rangee.insertCell(i);
+				cellule.innerHTML = champs[i];
+			}
+	
+			var positionTable = 1 ;
+			for (var i = 0 ; i < json.length-1 ; i++){
+				var valMontant = json[i]["MONTANT"];
+				var valMontantNum = 0;
+				if (valMontant != undefined){
+					valMontantNum = parseInt(valMontant);
+				}
+				if (valMontantNum == 0 || (valMontantNum < valMaxNum && valMontantNum > valMinNum))
+				{
+				
+					var rangee = table.insertRow(positionTable);
+					positionTable++;
+					
+					var celluleA = rangee.insertCell(0);
+					if (json[i]["FOURNISSEUR"] != undefined)
+					{
+						celluleA.innerHTML = json[i]["FOURNISSEUR"];
+					}
+					else
+					{
+						celluleA.innerHTML =" ";
+					}
+					
+					var celluleB = rangee.insertCell(1);
+					if (json[i]["APPROBATEUR"] != undefined)
+					{
+						celluleB.innerHTML = json[i]["APPROBATEUR"];
+					}
+					else
+					{
+						celluleB.innerHTML =" ";
+					}
+					
+					
+					var celluleC = rangee.insertCell(2);
+					if (json[i]["DESCRIPTION"] != undefined)
+					{
+						celluleC.innerHTML = json[i]["DESCRIPTION"];
+					}
+					else
+					{
+						celluleC.innerHTML =" ";
+					}
+					
+					var celluleD = rangee.insertCell(3);
+					if (json[i]["SERVICE"] != undefined)
+					{
+						celluleD.innerHTML = json[i]["SERVICE"];
+					}
+					else
+					{
+						celluleD.innerHTML =" ";
+					}
+					
+					var celluleE = rangee.insertCell(4);
+					if (json[i]["ACTIVITÉ"] != undefined)
+					{
+						celluleE.innerHTML = json[i]["ACTIVITÉ"];
+					}
+					else
+					{
+						celluleE.innerHTML =" ";
+					}
+					
+					var celluleF = rangee.insertCell(5);
+					if (json[i]["MONTANT"] != undefined)
+					{
+						celluleF.innerHTML = json[i]["MONTANT"];
+					}
+					else
+					{
+						celluleF.innerHTML =" ";
+					}
+					
+					var celluleG = rangee.insertCell(6);
+					if (json[i]["PORTION À LA CHARGE DE L'AGGLO."] != undefined)
+					{
+						celluleG.innerHTML = json[i]["PORTION À LA CHARGE DE L'AGGLO."];
+					}
+					else
+					{
+						celluleG.innerHTML =" ";
+					}
+					
+					var celluleH = rangee.insertCell(7);
+					if (json[i]["RÉPARTITION"] != undefined)
+					{
+						celluleH.innerHTML = json[i]["RÉPARTITION"];
+					}
+					else
+					{
+						celluleH.innerHTML =" ";
+					}
+					
+					var celluleI = rangee.insertCell(8);
+					if (json[i]["DIRECTION"] != undefined)
+					{
+						celluleI.innerHTML = json[i]["DIRECTION"];
+					}
+					else
+					{
+						celluleI.innerHTML =" ";
+					}
+					
+					var celluleJ = rangee.insertCell(9);
+					if (json[i]["NO DE DOSSIER"] != undefined)
+					{
+						celluleJ.innerHTML = json[i]["NO DE DOSSIER"];
+					}
+					else
+					{
+						celluleJ.innerHTML =" ";
+					}
+					
+					var celluleK = rangee.insertCell(10);
+					if (json[i]["OBJET"] != undefined)
+					{
+						celluleK.innerHTML = json[i]["OBJET"];
+					}
+					else
+					{
+						celluleK.innerHTML =" ";
+					}
+					
+					var celluleL = rangee.insertCell(11);
+					if (json[i]["NO DÉCISION"] != undefined)
+					{
+						celluleL.innerHTML = json[i]["NO DÉCISION"];
+					}
+					else
+					{
+						celluleL.innerHTML =" ";
+					}
+					
+					var celluleL = rangee.insertCell(12);	
+					if (json[i]["DATE SIGNATURE"] != undefined)
+					{
+						celluleL.innerHTML = json[i]["DATE SIGNATURE"];
+					}
+					else
+					{
+						celluleL.innerHTML =" ";
+					}		
+				}					
+			}
+		
+		document.getElementById("nombreContrat").innerHTML = json.length-1 + " Contrats";
+		
+		}
+	</script>
+	
+</head>
+<body>
+<div  class = "conteneur-fluide"  >
+	<div  class = "conteneur-fluide"  >
+		<div  class = "head"  >
+			<ul>
+				<li class="logo" id="logo"><a href="index.html"><img src="{% static "Montreal-logo.jpg" %}"" alt="Logo Montréal" /></a></li>
+				<li class="ligne" ><a href="https://www.linkedin.com/company/ville-de-montr-al" target="_blank"><img src="{% static "LinkedIn_logo.png" %}"" alt="Linked" /></a>&nbsp</li>
+				<li class="ligne" ><a href="https://www.youtube.com/user/MTLVille" target="_blank"><img src="{% static "logo-youtube.png" %}"" alt="Logo Youtube" /></a>&nbsp</li>
+				<li class="ligne" ><a href="https://twitter.com/mtl_ville" target="_blank"><img src="{% static "twitter1.png" %}"" alt="Logo Twitter" /></a>&nbsp</li>
+				<li class="ligne" ><a href="https://www.facebook.com/mtlville" target="_blank"><img src="{% static "logo_facebook.png" %}"" id="lf" alt="Logo Facebook" /></a>&nbsp</li>
+				<li class="ligne" id="ligneA">&nbspSuivez-nous&nbsp&nbsp</li>
+				<li class="ligne" id="ligneB" >&nbsp|&nbsp&nbsp</li>
+				<li class="ligne" id="ligneC">&nbspNous joindre&nbsp</li>
+			</ul>
+		</div>
+	</div>
+	<div id="bandeRouge">
+		<p>Contrats et Subventions octroyés</p>
+	</div>
+	<nav class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<a class="navbar-brand" href="index.html">Accueil&nbsp</a>
+			<a class="navbar-brand" href="#">License&nbsp</a>
+			<a class="navbar-brand" href="#">Explications&nbsp</a>
+		</div>
+	</nav>
+	<div class = "col-xs-12 col-sm-2">
+		<div class = "col-xs-12 col-sm-12" id="pannelRecherche">
+			<div class="panel panel-default">
+				<div class="panel-heading" id="rt"></div>
+				<div class="panel-body">
+					<FORM onsubmit="searchScript(); return false;" name="ajax" action="">
+						<INPUT type="text" name="valeurRech"  value="">
+						<input type="submit">
+					</FORM>
+				</div>
+			</div>
+		</div>
+		<div class = "col-xs-12 col-sm-12" id="panelType" >
+			<div class="panel panel-default">
+				<div class="panel-heading" id="rt">Type d'octroi</div>
+				<div class="panel-body">
+					<FORM method="POST" name="ajax" action="">
+						<INPUT type="radio" name="type" value="Contrat">&nbspComité exécutif</br>
+						<INPUT type="radio" name="type" value="Subvention">&nbspConseil d'agglomération</br>
+						<INPUT type="radio" name="type" value="Subvention">&nbspConseil municipal</br>
+						<INPUT type="radio" name="type" value="Subvention">&nbspFonctionnaires - agglomération</br>
+						<INPUT type="radio" name="type" value="Subvention">&nbspFonctionnaires - ville</br>
+					</FORM>
+				</div>
+			</div>
+		</div>
+		<!-- <div class = "col-xs-12 col-sm-12" id="panelAutorisé" >
+			<div class="panel panel-default">
+			  <div class="panel-heading" id="rt">Autorisé par</div>
+			  <div class="panel-body">
+				<FORM method="POST" name="ajax" action="">
+					<INPUT type="checkbox" name="autorisation" value="Contrat">&nbspContrat</br>
+					<INPUT type="checkbox" name="autorisation" value="Subvention">&nbspSubvention
+				</FORM>
+			  </div>
+			  </div>
+		</div> -->
+		<div class = "col-xs-12 col-sm-12" id="pannelMontant">
+			<div class="panel panel-default">
+				<div class="panel-heading" id="rt">Montant ($ CAD)</div>
+				<div class="panel-body">
+					<FORM method="POST" name="ajax" action="">
+						<INPUT type="text" id="montantMin" value="Minimum"></br></br>
+						<INPUT type="text" id="montantMax" value="Maximum">
+					</FORM>
+			    </div>
+			</div>
+		</div>
+		<div class = "col-xs-12 col-sm-12" id="pannelDates">
+			<div class="panel panel-default">
+			    <div class="panel-heading" id="rt">Dates</div>
+			    <div class="panel-body">
+					<FORM method="POST" name="ajax" action="">
+						<INPUT type="date" name="date">
+						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbspà&nbsp
+						<INPUT type="date" name="date">
+						<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+					</FORM>
+			    </div>
+			</div>
+		</div> 
+	</div>
+	<div class = "col-xs-12 col-sm-10">
+		<nav class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<a class="navbar-brand" href="accueil.html" id="nombreContrat"></a>
+				<ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Télécharger<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">CSV</a>
+                            </li>
+                            <li><a href="#">XLS</a>
+                            </li>
+                            <li><a href="#">PDF</a>
+                            </li>
+                        </ul>
+                    </li>
+				</ul>
+			<ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tri<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Nom du fournisseur</a>
+                        </li>
+                        <li><a href="#">Montant</a>
+                        </li>
+                        <li><a href="#">Date d'octroi</a>
+                        </li>
+                    </ul>
+                </li>
+             </ul>
+			</div>
+		</nav>
+	</div> 
+	<div class = "col-xs-12 col-sm-10">
+    	<div class="panel panel-default">
+				<div class="panel-heading" id="rt"></div>
+				<div class="panel-body">
+				</div>
+		</div>
+	</div>
+	<div class = "col-xs-12 col-sm-10">
+		<div class="panel panel-default">
+			<div class="panel-heading" id="rt"></div>
+			<div class="panel-body">
+			<table border="1" style="width:100%" id="tableRes">
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
+    <script src="{% static "vendor/jquery/jquery-1.11.0.min.js" %}""></script>
+    <script src="{% static "vendor/bootstrap/js/bootstrap.min.js" %}""></script>
+    <script src="{% static "css/bootstrap-responsive.min.css" %}""></script>
+</body>
+</html>

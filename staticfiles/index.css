@@ -1,0 +1,46 @@
+
+.ligne {
+	display: inline;
+	float: right;
+	padding-top:15px;
+	font-size: 16px;
+}
+
+#pannelRecherche {
+	position:relative;
+}
+
+.navbar-brand {
+	display: inline;
+	float: right;
+}
+
+#pannelType {
+	position:relative;
+}
+
+.logo {
+	display: inline;
+}
+
+#ligneA,#ligneC, #ligneB{
+	padding-top:25px;
+}
+
+#bandeRouge {
+	background:#E4312A;
+	color:#FFF;
+	height: 30px;
+	padding-left:110px;
+	font-size: 20px;
+}
+
+.navbar-header {
+    background: #E4312A;
+}
+
+
+.head {
+    background: #E2E4E3;
+	height: 72px;
+}

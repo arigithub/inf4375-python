@@ -1,0 +1,1 @@
+elasticsearch-client\bin\elasticsearch.bat
